@@ -79,7 +79,7 @@ def main() -> None:
     )
 
     # Sample Preset Selectors
-    st.markdown("### 💡 Sample Cebuano Health Queries")
+    st.markdown("### 💡 Sampol nga mga Reklamo sa Panglawas (Sample Chief Complaints)")
     col_presets = st.columns(3)
     preset_keys = list(SAMPLE_PROMPTS.keys())
     
@@ -91,7 +91,7 @@ def main() -> None:
 
     # Input Area
     st.markdown("### 📝 Isulat ang Imong Gibati (Chief Complaint)")
-    user_query = st.text_area(
+    complaint_input = st.text_area(
         "Enter patient symptoms in conversational Cebuano:",
         value=st.session_state.chief_complaint,
         placeholder="Pananglit: 'Mura ko'g gipanuhot sa likod ug abaga human sa ulan, unya lipong akong ulo.'",
@@ -103,8 +103,8 @@ def main() -> None:
         run_button = st.button("🚀 Sugdi ang Konsultasyon (Run Consultation)", type="primary", use_container_width=True)
 
     if run_button:
-        query_text = user_query.strip()
-        if not query_text:
+        complaint_text = complaint_input.strip()
+        if not complaint_text:
             st.error("Palihug pagsulat og reklamo sa panglawas (Chief complaint cannot be empty).")
         else:
             pipeline = get_pipeline(
@@ -113,7 +113,7 @@ def main() -> None:
                 medical_model=medical_model,
             )
             with st.spinner("Naglutos sa 3-stage circular pipeline (Gemma 4 -> MedGemma -> Gemma 4)..."):
-                result = pipeline.run(query_text)
+                result = pipeline.run(complaint_text)
                 st.session_state.last_result = result
                 save_run(result)
 
@@ -128,7 +128,7 @@ def main() -> None:
             st.subheader("📊 Execution Performance & Latency")
             m1, m2, m3, m4 = st.columns(4)
             m1.metric("Stage 1: NLU Translation", f"{result.metrics.translation_en_ms:.1f} ms", "Gemma 4")
-            m2.metric("Stage 2: Clinical Reasoning", f"{result.metrics.medical_inference_ms:.1f} ms", "MedGemma")
+            m2.metric("Stage 2: Clinical Medical Guidance", f"{result.metrics.medical_inference_ms:.1f} ms", "MedGemma")
             m3.metric("Stage 3: Cebuano NLG", f"{result.metrics.translation_ceb_ms:.1f} ms", "Gemma 4")
             m4.metric("Total Turnaround", f"{result.metrics.total_turnaround_ms:.1f} ms", "End-to-End")
 
@@ -143,7 +143,7 @@ def main() -> None:
             with st.expander("🔍 Inspect Stage 1: Cebuano → Clinical English Translation (Gemma 4)", expanded=True):
                 st.info(result.english_translation)
 
-            with st.expander("🔍 Inspect Stage 2: MedGemma Clinical Medical Reasoning (English)", expanded=True):
+            with st.expander("🔍 Inspect Stage 2: MedGemma Clinical Medical Guidance (English)", expanded=True):
                 st.info(result.english_medical_guidance)
 
             # Download Artifact JSON

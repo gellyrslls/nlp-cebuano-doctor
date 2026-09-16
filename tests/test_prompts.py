@@ -1,4 +1,4 @@
-"""Unit tests for prompt formatting and idiom mapping."""
+"""Tests for prompt formatting and idiom mapping."""
 import unittest
 from src.domain.prompts import (
     CEBUANO_MEDICAL_IDIOMS,

@@ -1,4 +1,4 @@
-"""Unit tests for CebuanoDoctorPipeline seam."""
+"""Tests for CebuanoDoctorPipeline seam."""
 from src.domain.pipeline import CebuanoDoctorPipeline
 from src.domain.provider import MockModelProvider
 
@@ -14,11 +14,11 @@ def test_circular_pipeline_runs_successfully():
     provider = MockModelProvider(simulated_latency_s=0.005)
     pipeline = CebuanoDoctorPipeline(provider=provider)
 
-    query = "Gipaningot ko ug nagsakit akong tiyan unya gikalibanga ko."
-    result = pipeline.run(query)
+    complaint = "Gipaningot ko ug nagsakit akong tiyan unya gikalibanga ko."
+    result = pipeline.run(complaint)
 
     assert result.status == "success"
-    assert result.chief_complaint == query
+    assert result.chief_complaint == complaint
     assert len(result.english_translation) > 0
     assert len(result.english_medical_guidance) > 0
     assert len(result.cebuano_medical_guidance) > 0

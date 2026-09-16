@@ -12,7 +12,7 @@ class ModelProvider(Protocol):
 
 
 class MockModelProvider:
-    """Deterministic mock provider for unit testing and offline development."""
+    """Deterministic mock provider for stage evaluation and offline development."""
 
     def __init__(self, simulated_latency_s: float = 0.01) -> None:
         self.simulated_latency_s = simulated_latency_s

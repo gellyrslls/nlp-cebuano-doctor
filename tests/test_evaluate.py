@@ -1,4 +1,4 @@
-"""Tests for 5-prompt automated evaluation suite and benchmark runner."""
+"""Tests for 5-scenario automated stage evaluation suite."""
 from pathlib import Path
 from src.domain.pipeline import CebuanoDoctorPipeline
 from src.domain.provider import MockModelProvider
@@ -10,7 +10,7 @@ from src.evaluate import (
 )
 
 
-def test_benchmark_prompts_dataset_coverage():
+def test_stage_evaluation_prompts_dataset_coverage():
     assert len(BENCHMARK_PROMPTS) >= 5
 
     categories = {p["category"] for p in BENCHMARK_PROMPTS}
@@ -35,7 +35,7 @@ def test_run_evaluation_aggregates_metrics():
     assert stats["success_rate_percent"] == 100.0
 
 
-def test_generate_benchmark_markdown():
+def test_generate_stage_evaluation_markdown():
     pipeline = CebuanoDoctorPipeline(provider=MockModelProvider(simulated_latency_s=0.001))
     eval_data = run_evaluation(pipeline, prompts=BENCHMARK_PROMPTS[:2])
     md = generate_benchmark_markdown(eval_data)

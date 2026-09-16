@@ -15,16 +15,23 @@ def test_parse_args_defaults():
 def test_parse_args_custom_values():
     args = parse_args([
         "--mock",
-        "--query", "Sakit akong likod",
+        "--chief-complaint", "Sakit akong likod",
         "--model-translate", "custom:translate",
         "--model-medical", "custom:med",
         "--save-dir", "test_runs",
     ])
     assert args.mock is True
+    assert args.chief_complaint == "Sakit akong likod"
     assert args.query == "Sakit akong likod"
     assert args.model_translate == "custom:translate"
     assert args.model_medical == "custom:med"
     assert args.save_dir == "test_runs"
+
+
+def test_parse_args_backwards_compatible_query():
+    args = parse_args(["--query", "Gisakit akong dughan"])
+    assert args.chief_complaint == "Gisakit akong dughan"
+    assert args.query == "Gisakit akong dughan"
 
 
 def test_run_consultation_executes_renders_and_saves(tmp_path):

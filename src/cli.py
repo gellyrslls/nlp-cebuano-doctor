@@ -29,10 +29,15 @@ def parse_args(args: Optional[Sequence[str]] = None) -> argparse.Namespace:
         help="Run using offline MockModelProvider without connecting to Ollama.",
     )
     parser.add_argument(
+        "--chief-complaint",
+        "--complaint",
         "--query",
+        "-c",
+        "-q",
+        dest="chief_complaint",
         type=str,
         default=None,
-        help="Single Cebuano chief complaint to run non-interactively.",
+        help="Single Cebuano Chief Complaint to run non-interactively.",
     )
     parser.add_argument(
         "--model-translate",
@@ -61,7 +66,9 @@ def parse_args(args: Optional[Sequence[str]] = None) -> argparse.Namespace:
         default=[1, 2, 3],
         help="Pipeline stages to inspect in terminal output (1: NLU, 2: Inference, 3: NLG; default: 1 2 3).",
     )
-    return parser.parse_args(args)
+    parsed = parser.parse_args(args)
+    parsed.query = parsed.chief_complaint
+    return parsed
 
 
 def render_consultation_panels(
@@ -158,16 +165,20 @@ def render_consultation_panels(
 
 
 def run_consultation(
-    query: str,
-    pipeline: CebuanoDoctorPipeline,
+    chief_complaint: Optional[str] = None,
+    pipeline: Optional[CebuanoDoctorPipeline] = None,
     console: Optional[Console] = None,
     save_dir: Optional[Union[Path, str]] = "evaluations/runs",
     stages: Optional[Sequence[int]] = None,
+    query: Optional[str] = None,
 ) -> ConsultationResult:
-    """Run a single consultation query through pipeline, render results, and save artifact."""
+    """Run a single Chief Complaint through the circular medical pipeline, render results, and save artifact."""
+    complaint = (chief_complaint if chief_complaint is not None else query) or ""
+    if pipeline is None:
+        raise ValueError("Pipeline instance must be provided.")
     c = console or Console()
     with c.status("[bold green]Executing 3-stage circular medical pipeline...[/bold green]", spinner="dots"):
-        result = pipeline.run(query)
+        result = pipeline.run(complaint)
 
     saved_path = None
     if save_dir:
@@ -181,7 +192,7 @@ def run_consultation(
 
 
 def main(args: Optional[Sequence[str]] = None) -> int:
-    """CLI entrypoint supporting both single-query execution and interactive loop."""
+    """CLI entrypoint supporting both single Chief Complaint execution and interactive loop."""
     options = parse_args(args)
     console = Console()
 
@@ -197,10 +208,11 @@ def main(args: Optional[Sequence[str]] = None) -> int:
         medical_model=options.model_medical,
     )
 
-    # Single non-interactive query mode
-    if options.query is not None:
+    # Single non-interactive Chief Complaint mode
+    complaint = options.chief_complaint or options.query
+    if complaint is not None:
         result = run_consultation(
-            query=options.query,
+            chief_complaint=complaint,
             pipeline=pipeline,
             console=console,
             save_dir=options.save_dir,
@@ -239,7 +251,7 @@ def main(args: Optional[Sequence[str]] = None) -> int:
             break
 
         run_consultation(
-            query=cleaned,
+            chief_complaint=cleaned,
             pipeline=pipeline,
             console=console,
             save_dir=options.save_dir,

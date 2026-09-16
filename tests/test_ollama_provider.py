@@ -1,4 +1,4 @@
-"""Unit tests for OllamaProvider error handling and health checks."""
+"""Tests for OllamaProvider error handling and health checks."""
 import unittest
 from src.providers.ollama_provider import OllamaProvider
 
