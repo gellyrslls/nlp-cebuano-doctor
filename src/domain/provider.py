@@ -28,7 +28,7 @@ class MockModelProvider:
         sys_lower = (system_prompt or "").lower()
 
         # Stage 1: Cebuano to English translation
-        if "translate" in sys_lower and "cebuano" in sys_lower and ("clinical english" in sys_lower or "english" in sys_lower):
+        if "clinical english" in sys_lower:
             if "panuhot" in lower_prompt:
                 return "The patient is experiencing bodily aches and abdominal bloating attributed to sudden cold exposure."
             elif "ulo" in lower_prompt or "headache" in lower_prompt:
