@@ -1,0 +1,189 @@
+﻿Lecture Transcript
+Course: CS 5101 – Natural Language Processing (NLP), 1st Semester, 2026–2027
+Institution: University of San Carlos
+Instructor: Dr. Vladimir Mariano
+Source: https://www.youtube.com/watch?v=vJZ8DfOEbH8        
+________________
+
+
+[00:00 – 01:04] Setup & Introduction
+Dr. Vladimir Mariano:
+"Okay, let's begin... Okay, so today we're going to talk about Assignment 1."
+(Dr. Mariano shares his screen showing the class Google Doc entitled "Course_Journal_cs5101N_1p_1s26-27_USC" and copies the Google Meet link).
+________________
+
+
+[01:05 – 03:22] Assignment 1 Announcement: "The Cebuano Doctor"
+Dr. Vladimir Mariano:
+"So this is our course journal... Okay, Assignment 1. The deadline is September 17, 2026. I hope this is interesting to everyone. Today we are going to do a Cebuano—the Cebuano Doctor. I think there's a school there, right? Isn't there a hospital named Cebu Doctor?"
+Student:
+"Yes, sir."
+Dr. Vladimir Mariano:
+"University? Is it a school or a hospital?"
+Student:
+"It's both, sir."
+Dr. Vladimir Mariano:
+"Both? Okay. Yeah, that's what I remember. So, Cebu Doctor. Cebu Doc."
+________________
+
+
+[03:23 – 05:43] Project Concept & Grouping
+Dr. Vladimir Mariano:
+"So the goal is to create a Cebuano chatbot doctor. Not just a medical expert who can get input in Cebuano... And it's not just that the chatbot is not going to run on the cloud; it's going to run on your laptop.
+How many of you have tried using chatbots or AI models that run on your laptop? Thumbs up or thumbs down? I guess some of you have used it. In the chat, can you write down what kind of tools have you used for running chatbots on your laptop?"
+(Dr. Mariano types into the Google Doc: "Assignments can be done in pairs or solo.")
+"So Assignment 1 can be done in pairs, or you can do it solo. You can find a partner... because learning is a social activity, I would recommend that you find a partner. But you can also do it solo if you want to learn as much for yourself as possible."
+________________
+
+
+[05:44 – 11:22] Required Tools: Ollama & Local Execution
+Dr. Vladimir Mariano:
+"There are three things for you to download and install. The first one is Ollama. Ollama is a chatbot that can run locally on your machine. Inside Ollama, you can use different kinds of AI models: you can use Mematron, you can use Gemma, GLM, Chinese models, Qwen...
+There is also an issue with memory because there are AI models that are very large which you cannot download if your memory is not enough. Some models require little memory, some of them require big memory. If you're thinking of upgrading your memory, this is a good time to do that! You can tell your mom: 'Mom, I need to upgrade my memory for school!' That's a good excuse!
+Pero, you're not expected to really have a big memory. You can allocate a part of your SSD as memory for an augmentation of your main memory—at least that's what I did for my MacBook Air."
+(Dr. Mariano opens ollama.com on his browser).
+"Ollama lets you open models on your machine. What is the reason why it is very important, especially for our future, that our models will run locally? One thing is that you can use it as much as you can without running into costs of tokens. Have you heard of the word 'token maxing'? It means you have a certain amount of tokens allotted for what you paid for, and if you max that out, you have to pay more. There's a limit. But when you're using something that is running on your laptop, you have practically unlimited tokens.
+And these models that you can run on your laptop are getting better and better every month with new updates. Another thing that's important with a local model is privacy. All your data—everything you feed into the prompt—will not escape to the outside internet. You can even turn off your Wi-Fi, run a prompt, and it responds. That means nothing is being sent or received from the cloud."
+(Browsing Ollama pricing and discussing RAM).
+"Sayang, when I bought my MacBook Air it was just 16 GB. Sana pala 32 GB 'yung binili ko. Although memory is getting more expensive because of global demand in AI data centers, if you have a PC or Mac Mini, you can use that large memory to run big AI models."
+________________
+
+
+[11:23 – 19:26] Model 1: Gemma 4 by Google DeepMind
+Dr. Vladimir Mariano:
+"Next one is Gemma 4. Gemma 4 was released by Google DeepMind."
+(Dr. Mariano navigates to the Google DeepMind page for Gemma 4).
+"This was released April 2026, just a few months ago. There have been very good reviews of this, and I tried it myself for computer vision—I uploaded a picture and asked Gemma 4 to describe it, and it did quite well.
+It is also very fluent in many languages. It is created using a process called distilling. Distilling is when they have a very, very large model—maybe hundreds of billions or more than a trillion parameters—and they create a smaller brain/model by distilling knowledge from the bigger one. Many prompts are run on the big model, and the responses are used to train the smaller model, such as Gemma 4.
+You can use it for agentic workflows, coding assistants, or analyzing documents. It's not as good as models running in the cloud like Gemini, GPT, or Claude, but these local models are getting better and better. Soon, these local models will be enough for most of our needs—summarizing long documents, simple coding, or translation.
+What is most interesting for me is that it is fluent in 140 languages, including Philippine languages like Tagalog, Ilocano, Cebuano, and a little bit of Hiligaynon."
+________________
+
+
+[19:27 – 22:38] Model 2: MedGemma (Medical Expert Model)
+Dr. Vladimir Mariano:
+"The third thing you need to install is MedGemma. This is also a product of Google DeepMind, but it is an expert in the medical field. It was trained using knowledge from medical texts, advice, diagnosis, treatments, precautions, and therapies. You can download it and use it inside Ollama.
+You can ask for medical advice, but of course, this is something for us to evaluate—do not trust it 100%. If you have a medical expert running locally on your laptop, there are a lot of use cases: you could deploy this in a barangay or areas with limited internet connection, in a medical kiosk, or use it when you have private medical data you don't want leaked to the internet."
+________________
+
+
+[22:39 – 26:19] Python Architecture: Universal Translation Pipeline
+Dr. Vladimir Mariano:
+"Now that you have all this, you are ready to make your doctor. In Natural Language Processing, one of the holy grails of NLP is Universal Translation—from any language, translating directly to any other language.
+For Step 3: Write a Python program that takes a Cebuano healthcare query/question, translates it to English using Gemma 4, gets an English medical response from MedGemma, and then translates the response back to Cebuano using Gemma 4.
+It goes full circle: Cebuano query 
+→
+→
+ Translate to English (Gemma 4) 
+→
+→
+ MedGemma provides English medical response 
+→
+→
+ Translate back to Cebuano (Gemma 4). It is good to do this pipeline so you can evaluate each step of the translation."
+________________
+
+
+[26:20 – 30:38] Step 4: Evaluation of the System
+Dr. Vladimir Mariano:
+"Number 4 is evaluation. Evaluate the Cebuano Doctor using at least 5 prompts from your friends (not you!). Diversify your prompts from simple queries to complex medical situations:
+a. How accurate is the translation from Cebuano to English?
+b. How good is the medical response?
+c. How accurate is the translation from English to Cebuano?
+d. How else can you evaluate this system? (e.g., latency/response time).
+Try to ask your friends—especially those in nursing, medical school, or relatives. Test simple queries like 'I have a headache, what should I do?' all the way to complex situations like abdominal pain or specific symptoms. Evaluate whether MedGemma gives sound advice or hallucinations, because medical hallucinations are dangerous (delikado 'yun)."
+________________
+
+
+[30:39 – 34:40] AI Coding Tools & Linguistic Nuance
+Dr. Vladimir Mariano:
+"When you write your Python program, you may use AI coding tools. You can use help from AI coding tools as long as you learn from them, understand the code, know how to debug it, and know how to add features. AI coding tools are often hyped as tools for the lazy, but they are great learning tools. You can ask them to explain every part of the code you don't understand.
+Be mindful of language nuances—things 'lost in translation'. Just like the Tagalog word 'sayang'—how do you translate that to English? Similarly, what Cebuano words are difficult to translate to English? Ordinary people expressing their symptoms won't talk like medical textbooks; they express how they feel in colloquial terms."
+________________
+
+
+[34:41 – 40:18] Submission Guidelines & Career Advice
+Dr. Vladimir Mariano:
+"Number 5: Submit a PDF report as a slide presentation. Present also what you have learned in this assignment. Submission is on Canvas on or before September 17, 2026. Publish your program on GitHub and share the link in your report. On September 18, I will call on some people to present what they have learned.
+As an advice: The software engineering and IT landscape has changed a lot. It is no longer enough to just show your diploma or grades to future employers. Hindi na enough 'yun. It is much more important to show a portfolio of projects you have built. If you take this project further—deploy it on a Raspberry Pi in a local barangay health center with 500 users testing it, or make a video about it—that demonstrates initiative and practical skill far beyond a simple grade."
+________________
+
+
+[40:19 – 47:38] Live Terminal Demonstration (Testing MedGemma)
+Dr. Vladimir Mariano:
+"Let's test this quickly in Ollama."
+(Dr. Mariano switches to his terminal and runs ollama run alibayram/medgemma / medgemma).
+"Let's try asking in Tagalog first:
+Prompt: 'Sumasakit ang ulo ko. Anong pwede kong gawin?'
+Look, it can respond in Tagalog!
+MedGemma Output: 'Maraming posibleng dahilan kung bakit sumasakit ang ulo mo... Narito ang mga bagay na pwedeng mong gawin: Magpahinga sa tahimik na lugar... Uminom ng tubig... Kumain ng meryenda...'
+It says: rest, drink plenty of water for dehydration, eat light snacks. That's pretty good!
+Even though MedGemma might handle Tagalog or Cebuano directly, please still implement and follow the assigned pipeline: translating Cebuano to English via Gemma 4 first, querying MedGemma in English, and translating the response back to Cebuano. That way you can measure each component."
+________________
+
+
+[47:39 – 49:32] Wrapping Up & Connection to NLP
+Dr. Vladimir Mariano:
+"This assignment combines the two foundational branches of NLP:
+1. Natural Language Understanding (NLU): Understanding the Cebuano query and converting it into structured meaning/English.
+2. Natural Language Generation (NLG): Generating medical advice and generating natural Cebuano text back to the user.
+Please install Ollama, Gemma 4, and MedGemma early so you can troubleshoot any memory or environment issues. Have a good weekend, stay safe, and I will see you next week!"
+Students:
+"Goodbye and thank you, Sir!"
+________________
+
+
+________________
+📝 Lecture Summary
+1. Overview & Context
+* Class: CS 5101 – Natural Language Processing (NLP), University of San Carlos.
+* Instructor: Dr. Vladimir Mariano.
+* Core Topic: Introduction and technical walkthrough for Assignment 1: The Cebuano Doctor.
+* Due Date: Thursday, September 17, 2026 (Canvas submission). Presentations scheduled for September 18, 2026.
+* Work Mode: Can be done individually or in pairs.
+________________
+
+
+2. Assignment Objective & Pipeline
+The goal is to build a local, privacy-preserving conversational agent ("The Cebuano Doctor") that handles Cebuano healthcare queries through a multi-model translation and medical inference chain:
+1. User Query: User asks a medical question/expresses symptoms in Cebuano.
+2. Translation to English: Gemma 4 translates the Cebuano query into English.
+3. Medical Reasoning: MedGemma takes the English query and generates an expert medical response in English.
+4. Translation to Cebuano: Gemma 4 translates MedGemma’s English medical advice back into Cebuano.
+5. Output: The Cebuano response is displayed to the user.
+________________
+
+
+3. Required Software & Models (Local Deployment)
+* Ollama (ollama.com): Open-source tool to run LLMs locally on personal hardware.
+   * Advantages discussed: Data privacy (no sensitive medical queries sent to the cloud), offline operation, and zero API token costs.
+   * Hardware considerations: Allocating virtual memory/swap space on an SSD if local RAM is constrained.
+* * Gemma 4 (Google DeepMind):
+   * Released April 2026; trained via model distillation from larger frontier models (Gemini 3).
+   * Highly multilingual across 140 languages, specifically supporting Philippine languages (Tagalog, Cebuano, Ilocano, Hiligaynon).
+* * MedGemma (Google DeepMind):
+   * Specialized open-weights medical model fine-tuned on healthcare literature, symptoms, diagnosis, and triage guidelines.
+* ________________
+
+
+4. Evaluation Requirements
+Students must test the chatbot using at least 5 real-world prompts collected from other people (preferably friends/family in healthcare or nursing) covering both simple ailments and complex symptoms. The evaluation must answer:
+* Translation Accuracy (Cebuano 
+* →
+* →
+*  English): Did Gemma 4 capture colloquial symptom descriptions without losing meaning?
+* Medical Quality: Was MedGemma's advice accurate, sound, and free of medical hallucinations?
+* Translation Accuracy (English 
+* →
+* →
+*  Cebuano): Is the translated medical guidance clear and culturally natural?
+* System Metrics: Qualitative and quantitative performance (e.g., latency, response time based on local hardware specs).
+________________
+
+
+5. Submission & Professional Advice
+* Deliverables:
+   * Clean, documented Python code hosted on a public GitHub repository.
+   * Slide deck submitted as a PDF report summarizing methodology, prompt evaluations, screenshots, and learnings.
+* Use of AI Coding Tools: Permitted (e.g., Copilot, LLM assistants) provided students comprehend, debug, and explain the underlying architecture.
+* Industry Portfolio Advice: Dr. Mariano emphasized that employers value functional, real-world portfolio projects (e.g., deploying on edge devices like Raspberry Pi, barangay pilot testing) significantly more than academic grades alone.

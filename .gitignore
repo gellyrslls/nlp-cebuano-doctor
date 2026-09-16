@@ -1,7 +1,8 @@
 # Agent configurations, skills, and issue tracking
 .agents/
-docs/agents/
+docs/
 AGENTS.md
+CONTEXT.md
 skills-lock.json
 .scratch/
 
