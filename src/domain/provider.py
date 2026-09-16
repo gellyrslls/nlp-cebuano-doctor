@@ -31,6 +31,12 @@ class MockModelProvider:
         if "clinical english" in sys_lower:
             if "panuhot" in lower_prompt:
                 return "The patient is experiencing bodily aches and abdominal bloating attributed to sudden cold exposure."
+            elif "pasmo" in lower_prompt:
+                return "The patient is experiencing tremors, dizziness, and epigastric discomfort attributed to prolonged fasting."
+            elif "pamaol" in lower_prompt:
+                return "The patient reports diffuse musculoskeletal aches and soreness following strenuous physical exertion."
+            elif "hilanat" in lower_prompt or "ubo" in lower_prompt:
+                return "The patient has a fever of 38.5 degrees with productive cough and pleuritic chest discomfort."
             elif "ulo" in lower_prompt or "headache" in lower_prompt:
                 return "The patient has a severe throbbing headache."
             elif "tiyan" in lower_prompt or "kalibanga" in lower_prompt:
