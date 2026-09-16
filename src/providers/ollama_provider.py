@@ -20,6 +20,8 @@ class OllamaProvider:
         except Exception:
             return False
 
+    is_available = is_healthy
+
     def list_models(self) -> List[str]:
         """List tags of all locally downloaded models."""
         try:

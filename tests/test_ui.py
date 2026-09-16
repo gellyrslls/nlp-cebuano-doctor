@@ -76,3 +76,17 @@ def test_streamlit_app_executes_consultation_flow():
     assert len(at.metric) == 4
 
 
+def test_streamlit_app_live_mode_uncheck_mock():
+    from streamlit.testing.v1 import AppTest
+
+    app_path = Path(__file__).parent.parent / "app.py"
+    at = AppTest.from_file(str(app_path), default_timeout=10)
+    at.run(timeout=10)
+
+    # Uncheck mock mode to toggle live Ollama check
+    assert len(at.checkbox) > 0
+    at.checkbox[0].uncheck().run(timeout=10)
+
+    assert not at.exception
+
+

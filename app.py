@@ -37,7 +37,7 @@ def main() -> None:
     ollama_ready = False
     if not mock_mode:
         provider = OllamaProvider()
-        ollama_ready = provider.is_available()
+        ollama_ready = provider.is_healthy()
         if ollama_ready:
             st.sidebar.success("✅ Ollama daemon online (localhost:11434)")
         else:

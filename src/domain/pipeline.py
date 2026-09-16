@@ -1,8 +1,10 @@
 """Three-Stage Circular Pipeline for Cebuano Doctor."""
 import time
-from typing import Optional
+from pathlib import Path
+from typing import Optional, Union
 from src.domain.models import ConsultationResult, StageMetrics
 from src.domain.provider import ModelProvider, MockModelProvider
+from src.storage import save_run
 
 
 from src.domain.prompts import (
@@ -23,10 +25,14 @@ class CebuanoDoctorPipeline:
         provider: Optional[ModelProvider] = None,
         translation_model: str = "gemma4:e2b",
         medical_model: str = "alibayram/medgemma",
+        runs_dir: Optional[Union[Path, str]] = "evaluations/runs",
+        auto_save: bool = True,
     ) -> None:
         self.provider = provider or MockModelProvider()
         self.translation_model = translation_model
         self.medical_model = medical_model
+        self.runs_dir = runs_dir
+        self.auto_save = auto_save
 
     def run(self, chief_complaint: str) -> ConsultationResult:
         """Execute the 3-stage circular consultation pipeline."""
@@ -71,7 +77,7 @@ class CebuanoDoctorPipeline:
 
             metrics.total_turnaround_ms = round((time.perf_counter() - start_total) * 1000, 2)
 
-            return ConsultationResult(
+            result = ConsultationResult(
                 chief_complaint=complaint,
                 english_translation=english_translation,
                 english_medical_guidance=english_guidance,
@@ -79,12 +85,24 @@ class CebuanoDoctorPipeline:
                 metrics=metrics,
                 status="success",
             )
+            if self.auto_save and self.runs_dir:
+                try:
+                    save_run(result, runs_dir=self.runs_dir)
+                except Exception:
+                    pass
+            return result
 
         except Exception as exc:
             metrics.total_turnaround_ms = round((time.perf_counter() - start_total) * 1000, 2)
-            return ConsultationResult(
+            result = ConsultationResult(
                 chief_complaint=complaint,
                 metrics=metrics,
                 status="error",
                 error_message=str(exc),
             )
+            if self.auto_save and self.runs_dir:
+                try:
+                    save_run(result, runs_dir=self.runs_dir)
+                except Exception:
+                    pass
+            return result

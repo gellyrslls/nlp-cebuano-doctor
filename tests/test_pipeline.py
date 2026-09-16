@@ -68,3 +68,19 @@ def test_cultural_idiom_passed_to_stage1():
 
     assert result.status == "success"
     assert "bodily aches" in result.english_translation.lower() or "cold" in result.english_translation.lower()
+
+
+def test_pipeline_run_automatically_persists_artifact(tmp_path):
+    import json
+
+    provider = MockModelProvider()
+    pipeline = CebuanoDoctorPipeline(provider=provider, runs_dir=tmp_path)
+    result = pipeline.run("Gisakit akong ulo.")
+
+    assert result.status == "success"
+    run_files = list(tmp_path.glob("*.json"))
+    assert len(run_files) == 1
+
+    saved_data = json.loads(run_files[0].read_text(encoding="utf-8"))
+    assert saved_data["chief_complaint"] == "Gisakit akong ulo."
+    assert saved_data["status"] == "success"

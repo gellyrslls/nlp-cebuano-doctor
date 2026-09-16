@@ -6,6 +6,10 @@ CONTEXT.md
 skills-lock.json
 .scratch/
 
+# Evaluation run artifacts (keep folder tracked via .gitkeep)
+evaluations/runs/*.json
+!evaluations/runs/.gitkeep
+
 # Python virtual environment & cache
 __pycache__/
 *.py[cod]
