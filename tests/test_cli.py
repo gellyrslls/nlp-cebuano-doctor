@@ -121,3 +121,43 @@ def test_main_interactive_query_then_quit(monkeypatch, tmp_path):
     assert "gikalibanga_ko" in saved[0].name
 
 
+def test_parse_args_stage_flags():
+    args_default = parse_args([])
+    assert args_default.stages == [1, 2, 3]
+
+    args_custom = parse_args(["--stage", "1", "3"])
+    assert args_custom.stages == [1, 3]
+
+    args_single = parse_args(["--stages", "2"])
+    assert args_single.stages == [2]
+
+
+def test_run_consultation_selective_stage_inspection(tmp_path):
+    from rich.console import Console
+    from src.cli import run_consultation
+    from src.domain.pipeline import CebuanoDoctorPipeline
+    from src.domain.provider import MockModelProvider
+
+    pipeline = CebuanoDoctorPipeline(provider=MockModelProvider())
+    console = Console(record=True, width=100)
+
+    result = run_consultation(
+        query="Sakit akong tiyan",
+        pipeline=pipeline,
+        console=console,
+        save_dir=tmp_path,
+        stages=[1],
+    )
+
+    assert result.status == "success"
+    output = console.export_text()
+    assert "Stage 1" in output
+    assert "English Clinical Translation" in output
+    assert "Stage 2: MedGemma Clinical Guidance" not in output
+    assert "Stage 3: Cebuano Patient Response" not in output
+
+    # Full run artifact must still be saved
+    saved = list(tmp_path.glob("*.json"))
+    assert len(saved) == 1
+
+

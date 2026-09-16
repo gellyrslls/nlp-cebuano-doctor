@@ -52,6 +52,15 @@ def parse_args(args: Optional[Sequence[str]] = None) -> argparse.Namespace:
         default="evaluations/runs",
         help="Directory to persist structured run logs (default: evaluations/runs).",
     )
+    parser.add_argument(
+        "--stages",
+        "--stage",
+        nargs="+",
+        type=int,
+        choices=[1, 2, 3],
+        default=[1, 2, 3],
+        help="Pipeline stages to inspect in terminal output (1: NLU, 2: Inference, 3: NLG; default: 1 2 3).",
+    )
     return parser.parse_args(args)
 
 
@@ -59,8 +68,10 @@ def render_consultation_panels(
     result: ConsultationResult,
     console: Console,
     saved_path: Optional[Path] = None,
+    stages: Optional[Sequence[int]] = None,
 ) -> None:
     """Render structured rich panels for each stage of consultation."""
+    active_stages = set(stages if stages is not None else [1, 2, 3])
     console.print()
 
     # Chief Complaint Panel
@@ -89,40 +100,43 @@ def render_consultation_panels(
         return
 
     # Stage 1: Cebuano -> English Clinical Translation
-    t1_title = f"[bold yellow]Stage 1: English Clinical Translation ({result.metrics.translation_en_ms:.1f} ms)[/bold yellow]"
-    console.print(
-        Panel(
-            Text(result.english_translation, style="bright_white"),
-            title=t1_title,
-            subtitle="[yellow]Gemma 4 (NLU)[/yellow]",
-            border_style="yellow",
-            expand=True,
+    if 1 in active_stages:
+        t1_title = f"[bold yellow]Stage 1: English Clinical Translation ({result.metrics.translation_en_ms:.1f} ms)[/bold yellow]"
+        console.print(
+            Panel(
+                Text(result.english_translation, style="bright_white"),
+                title=t1_title,
+                subtitle="[yellow]Gemma 4 (NLU)[/yellow]",
+                border_style="yellow",
+                expand=True,
+            )
         )
-    )
 
     # Stage 2: English Medical Inference
-    t2_title = f"[bold green]Stage 2: MedGemma Clinical Guidance ({result.metrics.medical_inference_ms:.1f} ms)[/bold green]"
-    console.print(
-        Panel(
-            Text(result.english_medical_guidance, style="bright_white"),
-            title=t2_title,
-            subtitle="[green]MedGemma (Inference)[/green]",
-            border_style="green",
-            expand=True,
+    if 2 in active_stages:
+        t2_title = f"[bold green]Stage 2: MedGemma Clinical Guidance ({result.metrics.medical_inference_ms:.1f} ms)[/bold green]"
+        console.print(
+            Panel(
+                Text(result.english_medical_guidance, style="bright_white"),
+                title=t2_title,
+                subtitle="[green]MedGemma (Inference)[/green]",
+                border_style="green",
+                expand=True,
+            )
         )
-    )
 
     # Stage 3: Back-translation to Cebuano
-    t3_title = f"[bold bright_cyan]Stage 3: Cebuano Patient Response ({result.metrics.translation_ceb_ms:.1f} ms)[/bold bright_cyan]"
-    console.print(
-        Panel(
-            Text(result.cebuano_medical_guidance, style="bold bright_cyan"),
-            title=t3_title,
-            subtitle="[bright_cyan]Gemma 4 (NLG)[/bright_cyan]",
-            border_style="bright_cyan",
-            expand=True,
+    if 3 in active_stages:
+        t3_title = f"[bold bright_cyan]Stage 3: Cebuano Patient Response ({result.metrics.translation_ceb_ms:.1f} ms)[/bold bright_cyan]"
+        console.print(
+            Panel(
+                Text(result.cebuano_medical_guidance, style="bold bright_cyan"),
+                title=t3_title,
+                subtitle="[bright_cyan]Gemma 4 (NLG)[/bright_cyan]",
+                border_style="bright_cyan",
+                expand=True,
+            )
         )
-    )
 
     # Latency Breakdown Table
     table = Table(title="[bold magenta]Latency Breakdown & Performance[/bold magenta]", expand=True)
@@ -130,9 +144,12 @@ def render_consultation_panels(
     table.add_column("Component", style="dim")
     table.add_column("Latency (ms)", justify="right", style="bold green")
 
-    table.add_row("1. Cebuano -> English NLU", "Gemma 4", f"{result.metrics.translation_en_ms:.1f} ms")
-    table.add_row("2. Clinical Medical Reasoning", "MedGemma", f"{result.metrics.medical_inference_ms:.1f} ms")
-    table.add_row("3. English -> Cebuano NLG", "Gemma 4", f"{result.metrics.translation_ceb_ms:.1f} ms")
+    if 1 in active_stages:
+        table.add_row("1. Cebuano -> English NLU", "Gemma 4", f"{result.metrics.translation_en_ms:.1f} ms")
+    if 2 in active_stages:
+        table.add_row("2. Clinical Medical Reasoning", "MedGemma", f"{result.metrics.medical_inference_ms:.1f} ms")
+    if 3 in active_stages:
+        table.add_row("3. English -> Cebuano NLG", "Gemma 4", f"{result.metrics.translation_ceb_ms:.1f} ms")
     table.add_row("Total Turnaround Time", "End-to-End", f"{result.metrics.total_turnaround_ms:.1f} ms", style="bold yellow")
     console.print(table)
 
@@ -145,6 +162,7 @@ def run_consultation(
     pipeline: CebuanoDoctorPipeline,
     console: Optional[Console] = None,
     save_dir: Optional[Union[Path, str]] = "evaluations/runs",
+    stages: Optional[Sequence[int]] = None,
 ) -> ConsultationResult:
     """Run a single consultation query through pipeline, render results, and save artifact."""
     c = console or Console()
@@ -158,7 +176,7 @@ def run_consultation(
         except Exception as exc:
             c.print(f"[bold red]Failed to save run artifact:[/bold red] {exc}")
 
-    render_consultation_panels(result, c, saved_path=saved_path)
+    render_consultation_panels(result, c, saved_path=saved_path, stages=stages)
     return result
 
 
@@ -186,6 +204,7 @@ def main(args: Optional[Sequence[str]] = None) -> int:
             pipeline=pipeline,
             console=console,
             save_dir=options.save_dir,
+            stages=options.stages,
         )
         return 0 if result.status == "success" else 1
 
@@ -224,6 +243,7 @@ def main(args: Optional[Sequence[str]] = None) -> int:
             pipeline=pipeline,
             console=console,
             save_dir=options.save_dir,
+            stages=options.stages,
         )
 
     return 0
