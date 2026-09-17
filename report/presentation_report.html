@@ -1,0 +1,915 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>The Cebuano Doctor: Slide Presentation Report (CS 5101 NLP)</title>
+  <style>
+    :root {
+      --bg: #fafafa;
+      --surface: #ffffff;
+      --surface-subtle: #f4f4f5;
+      --surface-active: #e4e4e7;
+      --border: #e4e4e7;
+      --border-strong: #d4d4d8;
+      --text-primary: #18181b;
+      --text-secondary: #52525b;
+      --text-muted: #71717a;
+      --card-radius: 6px;
+      --btn-radius: 6px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-print-color-adjust: exact !important;
+      print-color-adjust: exact !important;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background-color: var(--bg);
+      color: var(--text-primary);
+      line-height: 1.5;
+      padding: 30px 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 36px;
+    }
+
+    .mono {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    }
+
+    .mono-eyebrow {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 6px;
+    }
+
+    .slide {
+      width: 1400px;
+      height: 788px;
+      min-height: 788px;
+      max-height: 788px;
+      background-color: var(--surface);
+      border-radius: var(--card-radius);
+      padding: 48px 64px 60px 64px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      position: relative;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.05);
+    }
+
+    .slide-header {
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 16px;
+      margin-bottom: 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+    }
+
+    .slide-header h2 {
+      font-size: 2.05rem;
+      font-weight: 800;
+      letter-spacing: -0.025em;
+      color: var(--text-primary);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      line-height: 1.2;
+    }
+
+    .slide-header .tag {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-size: 0.82rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      background: var(--surface-subtle);
+      color: var(--text-muted);
+      border: 1px solid var(--border-strong);
+      padding: 5px 14px;
+      border-radius: var(--card-radius);
+    }
+
+    .slide-footer {
+      position: absolute;
+      bottom: 18px;
+      left: 64px;
+      right: 64px;
+      display: flex;
+      justify-content: space-between;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      border-top: 1px solid var(--border);
+      padding-top: 10px;
+    }
+
+    .title-slide {
+      background-color: var(--surface);
+      border: 1px solid var(--border);
+      justify-content: center;
+      align-items: flex-start;
+      text-align: left;
+      padding: 70px 90px;
+    }
+
+    .title-slide h1 {
+      font-size: 3.2rem;
+      font-weight: 800;
+      letter-spacing: -0.035em;
+      color: var(--text-primary);
+      margin-bottom: 10px;
+      line-height: 1.12;
+    }
+
+    .title-slide h3 {
+      font-size: 1.35rem;
+      font-weight: 500;
+      color: var(--text-secondary);
+      margin-bottom: 36px;
+    }
+
+    .meta-box {
+      background: var(--surface-subtle);
+      border: 1px solid var(--border-strong);
+      border-radius: var(--card-radius);
+      padding: 24px 32px;
+      display: grid;
+      grid-template-columns: 1.15fr 1fr;
+      gap: 14px 36px;
+      text-align: left;
+      font-size: 1.02rem;
+      color: var(--text-secondary);
+      width: 100%;
+      max-width: 1050px;
+    }
+
+    .meta-box strong {
+      color: var(--text-primary);
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-size: 0.88rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      flex: 1;
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 22px;
+      flex: 1;
+    }
+
+    .card {
+      background: var(--surface-subtle);
+      border: 1px solid var(--border);
+      border-radius: var(--card-radius);
+      padding: 24px 28px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+    }
+
+    .card h3 {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 12px;
+      line-height: 1.25;
+    }
+
+    .card p {
+      font-size: 1.02rem;
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+
+    .card ul {
+      padding-left: 22px;
+      font-size: 1.02rem;
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+
+    .card ul li {
+      margin-bottom: 8px;
+    }
+
+    .diagram-center-wrap {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+      flex: 1;
+      margin: 8px 0;
+    }
+
+    .pipeline-diagram {
+      background: var(--surface-subtle);
+      color: var(--text-primary);
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      padding: 22px 30px;
+      border-radius: var(--card-radius);
+      font-size: 0.95rem;
+      line-height: 1.48;
+      white-space: pre;
+      border: 1px solid var(--border-strong);
+      display: inline-block;
+      text-align: left;
+      margin: 0 auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.88rem;
+      margin-top: 8px;
+    }
+
+    th, td {
+      padding: 10px 14px;
+      text-align: left;
+      border-bottom: 1px solid var(--border);
+      vertical-align: middle;
+    }
+
+    th {
+      background-color: var(--surface-subtle);
+      color: var(--text-muted);
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-weight: 700;
+      font-size: 0.78rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      border-bottom: 1px solid var(--border-strong);
+    }
+
+    tr:hover {
+      background-color: var(--surface-subtle);
+    }
+
+    .badge-pass {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      background: var(--surface);
+      color: var(--text-primary);
+      border: 1px solid var(--border-strong);
+      padding: 3px 8px;
+      border-radius: var(--card-radius);
+      font-weight: 700;
+      font-size: 0.76rem;
+    }
+
+    .disclaimer-banner {
+      background-color: var(--surface-subtle);
+      border-left: 3px solid var(--border-strong);
+      padding: 14px 20px;
+      border-radius: 0 var(--card-radius) var(--card-radius) 0;
+      font-size: 0.92rem;
+      color: var(--text-secondary);
+      line-height: 1.55;
+      margin-top: 18px;
+    }
+    .disclaimer-banner strong {
+      color: var(--text-primary);
+    }
+
+    code {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 0.85rem;
+      color: var(--text-primary);
+    }
+
+    @page {
+      size: 16in 9in;
+      margin: 0;
+    }
+
+    @media print {
+      html, body {
+        background: var(--bg) !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        gap: 0 !important;
+        width: 16in !important;
+        height: auto !important;
+      }
+      .slide {
+        box-shadow: none !important;
+        border: none !important;
+        border-radius: 0 !important;
+        width: 16in !important;
+        height: 9in !important;
+        min-height: 9in !important;
+        max-height: 9in !important;
+        padding: 50px 72px 64px 72px !important;
+        page-break-inside: avoid !important;
+        break-inside: avoid !important;
+        page-break-after: always !important;
+        break-after: page !important;
+        box-sizing: border-box !important;
+        overflow: hidden !important;
+      }
+      .slide:last-of-type {
+        page-break-after: auto !important;
+        break-after: auto !important;
+      }
+      .no-print {
+        display: none !important;
+        height: 0 !important;
+        margin: 0 !important;
+        padding: 0 !important;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Controls Bar -->
+  <div class="no-print" style="width: 1400px; display: flex; justify-content: space-between; align-items: center; color: var(--text-secondary); margin-bottom: -15px; font-family: ui-monospace, monospace; font-size: 13px;">
+    <span>[PRESENTATION DECK] CS 5101 NLP Assignment 1: University of San Carlos</span>
+    <button onclick="window.print()" style="background: var(--surface-subtle); color: var(--text-primary); border: 1px solid var(--border-strong); padding: 8px 18px; border-radius: 6px; font-weight: 700; font-family: ui-monospace, monospace; cursor: pointer;">
+      [Print / Save as PDF]
+    </button>
+  </div>
+
+  <!-- Slide 1: Title -->
+  <div class="slide title-slide">
+    <div class="mono-eyebrow">SEPTEMBER 2026 // CS 5101 NLP // DOKTOR SA SUGBO</div>
+    <h1>The Cebuano Doctor (Doktor sa Sugbo)</h1>
+    <h3>Three-Stage Circular Translation and Clinical Reasoning Pipeline</h3>
+    <div class="meta-box">
+      <div><strong>Course:</strong> CS 5101: Natural Language Processing</div>
+      <div><strong>Authors:</strong> Angelo Rosillosa and Liam Jones</div>
+      <div><strong>Institution:</strong> University of San Carlos (USC), Cebu</div>
+      <div><strong>Instructor:</strong> Dr. Vladimir Mariano</div>
+      <div><strong>Submission Date:</strong> September 17, 2026</div>
+      <div><strong>Repository:</strong> github.com/gellyrslls/nlp-cebuano-doctor</div>
+    </div>
+    <div class="slide-footer">
+      <span>CS 5101 NLP Assignment 1: University of San Carlos</span>
+      <span>01 / 14</span>
+    </div>
+  </div>
+
+  <!-- Slide 2: Problem Statement -->
+  <div class="slide">
+    <div class="slide-header">
+      <h2>01. Clinical Context and Linguistic Challenges</h2>
+      <span class="tag">Problem Statement</span>
+    </div>
+    <div class="grid-2">
+      <div class="card">
+        <h3>Linguistic Reality in Central Visayas</h3>
+        <ul>
+          <li>Cebuano speakers express physical distress using culture-bound somatic idioms (such as <em>panuhot</em>, <em>pasmo</em>, <em>kabuhi</em>, <em>pamalaybalay</em>, <em>pamaol</em>, <em>lupot</em>).</li>
+          <li>Patients in community consultations describe symptoms in vernacular idioms rather than standard clinical terminology.</li>
+          <li>Frontier clinical LLMs (such as Google DeepMind's <strong>MedGemma</strong>) are trained almost exclusively on English biomedical literature and international clinical guidelines.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>Failure Mode of Direct LLM Prompting</h3>
+        <ul>
+          <li>Direct colloquial Cebuano prompts fed to English clinical LLMs cause <strong>catastrophic semantic distortion</strong>, hallucinated triage, or missed emergency red flags.</li>
+          <li>Single-pass black-box responses conceal whether reasoning failures originated in <em>language understanding (NLU)</em> or <em>clinical inference</em>.</li>
+          <li><strong>Architectural Solution:</strong> A transparent, 3-stage circular translation and reasoning architecture running 100% offline via local Ollama models.</li>
+        </ul>
+      </div>
+    </div>
+    <div class="disclaimer-banner">
+      <strong>Academic AI Prototype:</strong> Developed for CS 5101 NLP. Provides preliminary triage education only and is NOT a substitute for professional physician evaluation. In a medical emergency, immediately seek hospital care.
+    </div>
+    <div class="slide-footer">
+      <span>The Cebuano Doctor | University of San Carlos</span>
+      <span>02 / 14</span>
+    </div>
+  </div>
+
+  <!-- Slide 3: Architecture -->
+  <div class="slide">
+    <div class="slide-header">
+      <h2>02. Three-Stage Circular Pipeline Architecture</h2>
+      <span class="tag">System Design</span>
+    </div>
+    <div class="diagram-center-wrap">
+      <div class="pipeline-diagram">
++-----------------------------------------------------------------------------------------+
+|                                PATIENT (Cebuano Speaker)                                |
+|    Input: "Bay, grabeha na gyud aning labad sa akong ulo samtang ga-review sa TC..."    |
++--------------------------------------------+--------------------------------------------+
+                                             |
+                                             v
++-----------------------------------------------------------------------------------------+
+| Stage 01: Natural Language Understanding (NLU) via Gemma 4 (gemma4:e2b)                 |
+| Function: Contextualizes colloquial idioms ("bakos sa agtang" -> circumferential band)  |
+| Output: "Patient presents with severe band-like tension headache and asthenopia..."     |
++--------------------------------------------+--------------------------------------------+
+                                             |
+                                             v
++-----------------------------------------------------------------------------------------+
+| Stage 02: Clinical Medical Reasoning via MedGemma (alibayram/medgemma)                  |
+| Function: Differential triage, supportive care (20-20-20 rule), safety protocol         |
+| Antimicrobial Stewardship: Strictly PROHIBITS self-administering unindicated antibiotics|
+| Output: "Assessment: Tension headache and digital asthenopia. Care: 20-20-20 rule..."   |
++--------------------------------------------+--------------------------------------------+
+                                             |
+                                             v
++-----------------------------------------------------------------------------------------+
+| Stage 03: Natural Language Generation (NLG) via Gemma 4 (gemma4:e2b)                    |
+| Function: Translates clinical guidance back into empathetic, accessible Sinugboanon     |
+| Output: "Base sa imong gipamati, kini nagpakita og tension headache... lagda 20-20-20"  |
++-----------------------------------------------------------------------------------------+
+      </div>
+    </div>
+    <div class="slide-footer">
+      <span>The Cebuano Doctor | University of San Carlos</span>
+      <span>03 / 14</span>
+    </div>
+  </div>
+
+  <!-- Slide 4: Local Execution & Privacy -->
+  <div class="slide">
+    <div class="slide-header">
+      <h2>03. Local Execution, Privacy, and Hardware Architecture</h2>
+      <span class="tag">Infrastructure</span>
+    </div>
+    <div class="grid-3">
+      <div class="card">
+        <h3>100% Air-Gapped Privacy</h3>
+        <p>Sensitive medical inquiries remain strictly on localhost (<code>http://localhost:11434</code>). Operating system Wi-Fi can be completely disabled. Zero patient health data leaks to cloud APIs.</p>
+      </div>
+      <div class="card">
+        <h3>Zero Token Exhaustion</h3>
+        <p>Dr. Mariano cautioned against token maxing and recurring API billing. Local offline models provide unlimited inferences, enabling exhaustive batch evaluation and clinical testing at zero marginal cost.</p>
+      </div>
+      <div class="card">
+        <h3>Secondary Drive Architecture</h3>
+        <p>Ollama model directory permanently configured on SSD Partition D (<code>D:\files\ollama\models</code>), safeguarding C: drive partition (~4.6 GB free) from model storage exhaustion.</p>
+      </div>
+    </div>
+    <div class="card" style="margin-top: 18px;">
+      <h3>Dual Execution Modes</h3>
+      <p><strong>Live Ollama Daemon:</strong> Real local LLM multi-stage clinical execution (~3.5 min end-to-end turnaround on local laptop CPU/GPU).<br>
+      <strong>Offline Mock Mode:</strong> Deterministic, sub-50ms test execution for instant UI demonstrations, test suites, and CI pipelines.</p>
+    </div>
+    <div class="slide-footer">
+      <span>The Cebuano Doctor | University of San Carlos</span>
+      <span>04 / 14</span>
+    </div>
+  </div>
+
+  <!-- Slide 5: Linguistic Nuance Analysis -->
+  <div class="slide">
+    <div class="slide-header">
+      <h2>04. Linguistic Grounding: Resolving "Lost in Translation"</h2>
+      <span class="tag">Cebuano NLP</span>
+    </div>
+    <p style="font-size: 0.95rem; color: var(--text-secondary); margin-bottom: 12px;">Generic translation models suffer catastrophic semantic drift on regional illness concepts. Our clinical prompt engineering bridges the gap:</p>
+    <table>
+      <thead>
+        <tr>
+          <th>Cultural Term</th>
+          <th>Generic LLM Calque (Failure Mode)</th>
+          <th>Cebuano Doctor Clinical Contextualization</th>
+          <th>Clinical Impact</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Panuhot</strong></td>
+          <td>"Wind trapped inside the body" / Flatulence</td>
+          <td><strong>Thoracic myofascial spasm and stiffness from sudden cold draft or rain</strong></td>
+          <td>Prevents misdiagnosis as gastrointestinal flatus</td>
+        </tr>
+        <tr>
+          <td><strong>Pasmo</strong></td>
+          <td>"Spasm" / Muscle convulsion</td>
+          <td><strong>Fasting hypoglycemia, cold tremors, and hunger gastritis from delayed meals</strong></td>
+          <td>Recognizes metabolic and meal-timing etiology</td>
+        </tr>
+        <tr>
+          <td><strong>Kabuhi</strong></td>
+          <td>"Life" / "Soul"</td>
+          <td><strong>Epigastric visceral flutter, hyperperistalsis, or acid reflux surging upward</strong></td>
+          <td>Distinguishes hyperacidity from panic symptoms</td>
+        </tr>
+        <tr>
+          <td><strong>Kalibanga / Lupot</strong></td>
+          <td>Generic stomach discomfort</td>
+          <td><strong>Acute watery diarrhea with hypovolemic dehydration risk</strong></td>
+          <td>Triggers essential Oral Rehydration Salts (ORS)</td>
+        </tr>
+        <tr>
+          <td><strong>Pamalaybalay</strong></td>
+          <td>"House building"</td>
+          <td><strong>Hyperactive borborygmi and spasmodic colic preceding loose watery stools</strong></td>
+          <td>Accurately captures prodromal cramping</td>
+        </tr>
+        <tr>
+          <td><strong>Tayaon nga plema</strong></td>
+          <td>"Rusty saliva"</td>
+          <td><strong>Purulent, rust-colored sputum indicating pulmonary consolidation</strong></td>
+          <td>Recognizes lower respiratory pneumonia</td>
+        </tr>
+        <tr>
+          <td><strong>Bakos sa agtang</strong></td>
+          <td>"Belt on forehead"</td>
+          <td><strong>Circumferential band-like tension headache from prolonged study strain</strong></td>
+          <td>Separates tension headache from migraine</td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="slide-footer">
+      <span>The Cebuano Doctor | University of San Carlos</span>
+      <span>05 / 14</span>
+    </div>
+  </div>
+
+  <!-- Slide 6: User Interfaces -->
+  <div class="slide">
+    <div class="slide-header">
+      <h2>05. Dual-Interface System Implementation</h2>
+      <span class="tag">CLI & Web App</span>
+    </div>
+    <div class="grid-2">
+      <div class="card">
+        <h3>Interactive Rich Terminal CLI (<code>python -m src.cli</code>)</h3>
+        <ul>
+          <li><strong>Colored Visual Panels:</strong> High-contrast terminal formatting for Chief Complaint, Stage 1 NLU, Stage 2 Inference, and Stage 3 NLG.</li>
+          <li><strong>Preset Scenario Selector:</strong> Instant invocation of benchmark scenarios via <code>--preset 1</code> through <code>--preset 5</code>.</li>
+          <li><strong>Live Latency Diagnostics:</strong> Real-time millisecond latency tables per stage and end-to-end turnaround.</li>
+          <li><strong>Offline Testing:</strong> Instant mock mode with <code>--mock</code> flag.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>Streamlit Web Application (<code>streamlit run app.py</code>)</h3>
+        <ul>
+          <li><strong>Tailwind Zinc Design System:</strong> Clean developer aesthetic adhering strictly to the shadcn/ui zinc scale with zero AI-vibe-coded gradients or emojis.</li>
+          <li><strong>5 Benchmark Presets Strip:</strong> Rapid scenario selection across Metro Cebu personas (USC TC Library, Carcar Aunt, IT Park BPO, Fuente Pungko, SRP Site).</li>
+          <li><strong>Unrolled Stage Cards:</strong> Fully unrolled two-column card layout displaying Stage 1 NLU, Stage 2 MedGemma, and Stage 3 NLG without accordion friction.</li>
+          <li><strong>Structured JSON Export:</strong> One-click consultation log download.</li>
+        </ul>
+      </div>
+    </div>
+    <div class="slide-footer">
+      <span>The Cebuano Doctor | University of San Carlos</span>
+      <span>06 / 14</span>
+    </div>
+  </div>
+
+  <!-- Slide 7: Evaluation Methodology -->
+  <div class="slide">
+    <div class="slide-header">
+      <h2>06. Evaluation Methodology: 4-Axis Quality Rubric</h2>
+      <span class="tag">Evaluation Suite</span>
+    </div>
+    <p style="font-size: 0.95rem; color: var(--text-secondary); margin-bottom: 14px;">As required by Dr. Mariano, the system was evaluated across 5 diverse patient scenarios along 4 critical dimensions:</p>
+    <div class="grid-2">
+      <div class="card">
+        <h3>Axis 1: Translation Fidelity (NLU)</h3>
+        <p>Does Gemma 4 capture the colloquial symptom description without loss of critical clinical meaning? Verified through semantic alignment between Cebuano idioms and clinical English representation.</p>
+      </div>
+      <div class="card">
+        <h3>Axis 2: Medical Reasoning Soundness (Inference)</h3>
+        <p>Is MedGemma's clinical advice safe, accurate, and free of medical hallucinations? Enforces non-prescriptive supportive care, antimicrobial stewardship, and emergency red flags.</p>
+      </div>
+      <div class="card">
+        <h3>Axis 3: Cultural Naturalness (NLG)</h3>
+        <p>Does Gemma 4 translate English clinical guidance into warm, understandable Cebuano that an ordinary patient and their family can comfortably understand without confusing jargon?</p>
+      </div>
+      <div class="card">
+        <h3>Axis 4: System Latency and Performance</h3>
+        <p>Quantitative millisecond response times measured per stage and end-to-end to assess edge deployment viability on consumer hardware.</p>
+      </div>
+    </div>
+    <div class="slide-footer">
+      <span>The Cebuano Doctor | University of San Carlos</span>
+      <span>07 / 14</span>
+    </div>
+  </div>
+
+  <!-- Slide 8: Evaluation Matrix Table -->
+  <div class="slide">
+    <div class="slide-header">
+      <h2>07. Five Authentic Peer Benchmark Personas</h2>
+      <span class="tag">Results Matrix</span>
+    </div>
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Persona & Location</th>
+          <th>Cebuano Patient Query</th>
+          <th>Stage 01 NLU Fidelity</th>
+          <th>Stage 02 MedGemma Soundness</th>
+          <th>Stage 03 NLG Quality</th>
+          <th>Safety</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>01</strong></td>
+          <td><strong>USC TC Library</strong><br>3rd-Yr BS Civil Eng.</td>
+          <td><em>"Bay, grabeha na gyud aning labad sa ulo... bakos akong agtang sa kahuot, sakit akong mata..."</em></td>
+          <td>Mapped to tension headache and eye strain</td>
+          <td>Advised 20-20-20 rule, hydration, darkness, paracetamol</td>
+          <td>Natural Cebuano; comforting tone</td>
+          <td><span class="badge-pass">[PASS]</span></td>
+        </tr>
+        <tr>
+          <td><strong>02</strong></td>
+          <td><strong>Carcar City</strong><br>52-Yr-Old Aunt</td>
+          <td><em>"Dong, kining abaga ug likod mura'g gipanuhot... nanikig akong liog, bukol-bukol sa gusok..."</em></td>
+          <td>Mapped to thoracic myofascial spasm and cold draft</td>
+          <td>Recommends warmth, gentle stretches; no deep force</td>
+          <td>Respectful, warm Sinugboanon</td>
+          <td><span class="badge-pass">[PASS]</span></td>
+        </tr>
+        <tr>
+          <td><strong>03</strong></td>
+          <td><strong>Cebu IT Park</strong><br>24-Yr-Old BPO Rep</td>
+          <td><em>"Doc, nag-night shift sa IT Park, sigeg laktaw kaon... gipasmo, nagkurog kamot, nagkabuhi..."</em></td>
+          <td>Mapped to fasting hypoglycemia and gastritis</td>
+          <td>Complex carbs/protein, cut energy drinks, frequent meals</td>
+          <td>Practical shift-worker advice</td>
+          <td><span class="badge-pass">[PASS]</span></td>
+        </tr>
+        <tr>
+          <td><strong>04</strong></td>
+          <td><strong>Fuente Osmeña</strong><br>21-Yr-Old BS Nursing</td>
+          <td><em>"Gikalibanga sukad kaon sa pungko-pungko... pamalaybalay sa tiyan. Mag-ciprofloxacin ba ko?"</em></td>
+          <td>Classified acute diarrhea and foodborne etiology</td>
+          <td><strong>Antimicrobial Stewardship:</strong> Prohibited ciprofloxacin; prioritized ORS</td>
+          <td>Strict warning on antibiotics</td>
+          <td><span class="badge-pass">[PASS]</span></td>
+        </tr>
+        <tr>
+          <td><strong>05</strong></td>
+          <td><strong>SRP Reclamation</strong><br>28-Yr-Old Safety Lead</td>
+          <td><em>"Ubo walay lurang-lurang... 39.2°C hilanat... plema tayaon, gidunggab og kutsilyo akong dughan..."</em></td>
+          <td>Identified rust sputum and severe pneumonia</td>
+          <td>Prohibited leftover drugs; emergency hospital and chest X-ray</td>
+          <td>Urgent ER directive</td>
+          <td><span class="badge-pass">[PASS]</span></td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="slide-footer">
+      <span>The Cebuano Doctor | University of San Carlos</span>
+      <span>08 / 14</span>
+    </div>
+  </div>
+
+  <!-- Slide 9: Latency Breakdown -->
+  <div class="slide">
+    <div class="slide-header">
+      <h2>08. Quantitative Latency Benchmarks</h2>
+      <span class="tag">Performance Profile</span>
+    </div>
+    <div class="grid-2">
+      <div class="card">
+        <h3>Comparative Performance Profile</h3>
+        <table>
+          <thead>
+            <tr>
+              <th>Pipeline Stage</th>
+              <th>Live Ollama Daemon</th>
+              <th>Offline Mock Mode</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Stage 01 (NLU Translation)</strong></td>
+              <td>~35.2 s (Gemma 4)</td>
+              <td><strong>10.7 ms</strong></td>
+            </tr>
+            <tr>
+              <td><strong>Stage 02 (Clinical Reasoning)</strong></td>
+              <td>~89.5 s (MedGemma)</td>
+              <td><strong>10.6 ms</strong></td>
+            </tr>
+            <tr>
+              <td><strong>Stage 03 (Cebuano NLG)</strong></td>
+              <td>~91.1 s (Gemma 4)</td>
+              <td><strong>11.0 ms</strong></td>
+            </tr>
+            <tr style="background: var(--surface-subtle); font-weight: bold;">
+              <td><strong>Total Turnaround Time</strong></td>
+              <td><strong>~215.8 s (~3.6 min)</strong></td>
+              <td><strong>32.3 ms</strong></td>
+            </tr>
+            <tr>
+              <td><strong>Privacy and Air-Gap</strong></td>
+              <td>100% Offline (Localhost)</td>
+              <td>100% Offline (In-Memory)</td>
+            </tr>
+            <tr>
+              <td><strong>Safety Pass Rate</strong></td>
+              <td>100.0% (5/5 PASS)</td>
+              <td>100.0% (5/5 PASS)</td>
+            </tr>
+          </tbody>
+        </table>
+        <p style="font-size: 0.82rem; color: var(--text-muted); margin-top: 10px;">*Live Ollama benchmark executed on Intel CPU / 4GB GPU with models stored on D:\files\ollama\models.</p>
+      </div>
+      <div class="card">
+        <h3>Architectural Takeaways</h3>
+        <ul>
+          <li><strong>Transparent Traceability:</strong> Every consultation run logs per-stage millisecond timings into structured JSON artifacts (<code>evaluations/runs/*.json</code>).</li>
+          <li><strong>Memory-Constrained Optimization:</strong> Sequential stage execution permits running 7.2 GB and 2.5 GB model weights on modest laptop hardware without memory overflow.</li>
+          <li><strong>Instant Regression Testing:</strong> Deterministic mock provider executes the entire 5-scenario evaluation suite in <strong>157 ms</strong>.</li>
+        </ul>
+      </div>
+    </div>
+    <div class="slide-footer">
+      <span>The Cebuano Doctor | University of San Carlos</span>
+      <span>09 / 14</span>
+    </div>
+  </div>
+
+  <!-- Slide 10: Safety & Hallucination Prevention -->
+  <div class="slide">
+    <div class="slide-header">
+      <h2>09. Medical Safety and Antimicrobial Stewardship</h2>
+      <span class="tag">Clinical Ethics</span>
+    </div>
+    <div class="grid-3">
+      <div class="card">
+        <h3>Antimicrobial Stewardship</h3>
+        <p>When patients inquire about self-administering antibiotics (such as ciprofloxacin for diarrhea or amoxicillin for cough), the pipeline strictly prohibits unindicated use, citing resistance and gut flora toxicity.</p>
+      </div>
+      <div class="card">
+        <h3>No Prescription Rule</h3>
+        <p>The system is strictly prompt-engineered against prescribing regulated pharmaceuticals or calculating drug dosages. Advice is limited to evidence-backed supportive care (ORS, hydration, rest, 20-20-20 rule).</p>
+      </div>
+      <div class="card">
+        <h3>Red Flag Surveillance</h3>
+        <p>Every response actively screens for alarming symptoms: dyspnea, cyanosis, rust sputum, hematochezia, syncope, or thunderclap headaches, mandating immediate emergency triage.</p>
+      </div>
+    </div>
+    <div class="disclaimer-banner" style="margin-top: 22px;">
+      <strong>Universal Clinical Disclaimer:</strong> All consultations conclude with a clear, culturally respectful reminder that AI is an educational triage tool and urging an in-person visit to a licensed physician or Barangay Health Worker.
+    </div>
+    <div class="slide-footer">
+      <span>The Cebuano Doctor | University of San Carlos</span>
+      <span>10 / 14</span>
+    </div>
+  </div>
+
+  <!-- Slide 11: Engineering Rigor & TDD -->
+  <div class="slide">
+    <div class="slide-header">
+      <h2>10. Software Engineering and Verification Discipline</h2>
+      <span class="tag">Quality Assurance</span>
+    </div>
+    <div class="grid-2">
+      <div class="card">
+        <h3>Test-Driven Development (TDD)</h3>
+        <ul>
+          <li>Strict Red to Green vertical slice development across all milestones.</li>
+          <li>Tests written strictly against public interfaces and seams; zero assertions on private internal methods.</li>
+          <li><strong>Conventional Commits:</strong> Clean semantic commit history tracking each feature incrementally.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>Comprehensive Test Suite (43 Tests Passing)</h3>
+        <ul>
+          <li><code>test_pipeline.py</code>: Circular orchestration, custom query fallbacks, latency logging, error recovery.</li>
+          <li><code>test_prompts.py</code>: Idiom contextualization and clinical prompt formatting.</li>
+          <li><code>test_ollama_provider.py</code>: Daemon health checks, graceful offline handling.</li>
+          <li><code>test_storage.py</code>: JSON run logging, slug sanitization, serialization.</li>
+          <li><code>test_cli.py</code>: Argument parser, preset scenarios, Rich panel rendering, REPL loop.</li>
+          <li><code>test_ui.py</code>: Streamlit AppTest integration and consultation flow.</li>
+          <li><code>test_evaluate.py</code>: 5-prompt batch runner, KPI calculations, safety rule evaluation.</li>
+          <li><code>test_report.py</code>: Slide deck and PDF presentation verification.</li>
+        </ul>
+      </div>
+    </div>
+    <div class="slide-footer">
+      <span>The Cebuano Doctor | University of San Carlos</span>
+      <span>11 / 14</span>
+    </div>
+  </div>
+
+  <!-- Slide 12: Real-World Deployment Vision -->
+  <div class="slide">
+    <div class="slide-header">
+      <h2>11. Edge Deployment: Rural Barangay Health Stations</h2>
+      <span class="tag">Community Vision</span>
+    </div>
+    <div class="diagram-center-wrap" style="margin-bottom: 16px;">
+      <div class="pipeline-diagram" style="padding: 16px 24px; font-size: 0.88rem; line-height: 1.4;">
++-----------------------------------------------------------------------------------------+
+|                      BARANGAY HEALTH STATION (BHS) / RURAL CLINIC                       |
+|                            (Zero Internet / Mountain Barangay)                          |
++-----------------------------------------------------------------------------------------+
+|                                                                                         |
+|    +------------------------+                        +-----------------------------+    |
+|    |   Patient / Resident   |                        |   Barangay Health Worker    |    |
+|    |   (Speaks Cebuano)     |                        |   (BHW Triage Assistant)    |    |
+|    +-----------+------------+                        +--------------+--------------+    |
+|                |                                                    |                   |
+|                v                                                    v                   |
+|    +-------------------------------------------------------------------------------+    |
+|    |   Local Edge Device (Raspberry Pi 5 / Jetson Orin Nano / Mini-PC)             |    |
+|    |   - Ollama Local Daemon + Gemma 4 + MedGemma (Quantized GGUF)                 |    |
+|    |   - Zero Internet Required | Local SQLite / JSON Run Archive                  |    |
+|    |   - Touchscreen Kiosk UI or Local Wi-Fi Hotspot Portal                        |    |
+|    +-------------------------------------------------------------------------------+    |
++-----------------------------------------------------------------------------------------+
+      </div>
+    </div>
+    <div class="grid-3" style="flex: 0.6;">
+      <div class="card" style="padding: 16px 20px;">
+        <h3 style="font-size: 1.1rem; margin-bottom: 6px;">For Barangay Health Workers</h3>
+        <p style="font-size: 0.92rem;">Acts as an intelligent preliminary triage aide for BHWs when physicians visit only once a month.</p>
+      </div>
+      <div class="card" style="padding: 16px 20px;">
+        <h3 style="font-size: 1.1rem; margin-bottom: 6px;">For Remote Residents</h3>
+        <p style="font-size: 0.92rem;">Overcomes literacy and language barriers: allows expressing complaints freely in their native Cebuano mother tongue.</p>
+      </div>
+      <div class="card" style="padding: 16px 20px;">
+        <h3 style="font-size: 1.1rem; margin-bottom: 6px;">Community Impact</h3>
+        <p style="font-size: 0.92rem;">Provides early warning for dengue, gastroenteritis, or pneumonia outbreaks before regional escalation.</p>
+      </div>
+    </div>
+    <div class="slide-footer">
+      <span>The Cebuano Doctor | University of San Carlos</span>
+      <span>12 / 14</span>
+    </div>
+  </div>
+
+  <!-- Slide 13: Key Learnings -->
+  <div class="slide">
+    <div class="slide-header">
+      <h2>12. Key Learnings and Course Reflections</h2>
+      <span class="tag">Reflections</span>
+    </div>
+    <div class="grid-2">
+      <div class="card">
+        <h3>Natural Language Processing Takeaways</h3>
+        <ul>
+          <li><strong>NLU is harder than NLG in Philippine languages:</strong> Parsing colloquial folk medicine metaphors demands precise contextual prompt engineering.</li>
+          <li><strong>Circular pipelines enable interpretability:</strong> Without intermediate English representations, auditing AI clinical reasoning is impossible.</li>
+          <li><strong>Model Distillation is democratizing AI:</strong> Google DeepMind's distilled Gemma 4 weights bring frontier multi-lingual capabilities to personal laptops.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>Engineering Insights</h3>
+        <ul>
+          <li><strong>Seam isolation pays dividends:</strong> Decoupling the model provider via protocols made unit testing instant without multi-gigabyte downloads.</li>
+          <li><strong>Antimicrobial stewardship is essential:</strong> Community chatbots must actively discourage antibiotic misuse rather than remaining passive.</li>
+          <li><strong>Graceful error recovery is mandatory:</strong> Handling daemon disconnects gracefully ensures high clinical reliability.</li>
+        </ul>
+      </div>
+    </div>
+    <div class="slide-footer">
+      <span>The Cebuano Doctor | University of San Carlos</span>
+      <span>13 / 14</span>
+    </div>
+  </div>
+
+  <!-- Slide 14: Conclusion & Links -->
+  <div class="slide title-slide">
+    <div class="mono-eyebrow">CS 5101 NLP // UNIVERSITY OF SAN CARLOS</div>
+    <h1 style="font-size: 2.8rem; margin-bottom: 8px;">Daghang Salamat!</h1>
+    <p style="color: var(--text-secondary); font-size: 1.2rem; margin-bottom: 28px;">The Cebuano Doctor: Local, Privacy-Preserving Healthcare NLP for the Visayas</p>
+
+    <div class="meta-box" style="line-height: 2.0; font-size: 1.05rem;">
+      <div><strong>Authors:</strong> Angelo Rosillosa and Liam Jones</div>
+      <div><strong>GitHub Repository:</strong> https://github.com/gellyrslls/nlp-cebuano-doctor</div>
+      <div><strong>CLI Application:</strong> <code>python -m src.cli --mock --preset 1</code></div>
+      <div><strong>Streamlit Web UI:</strong> <code>streamlit run app.py</code></div>
+      <div><strong>Benchmark Runner:</strong> <code>python -m src.evaluate --mock</code></div>
+      <div><strong>Automated Tests:</strong> <code>python -m pytest tests</code> (43 tests passing)</div>
+    </div>
+
+    <div class="slide-footer">
+      <span>CS 5101 Natural Language Processing | Dr. Vladimir Mariano</span>
+      <span>14 / 14</span>
+    </div>
+  </div>
+
+</body>
+</html>

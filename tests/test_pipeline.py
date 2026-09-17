@@ -84,3 +84,34 @@ def test_pipeline_run_automatically_persists_artifact(tmp_path):
     saved_data = json.loads(run_files[0].read_text(encoding="utf-8"))
     assert saved_data["chief_complaint"] == "Gisakit akong ulo."
     assert saved_data["status"] == "success"
+
+
+def test_motion_sickness_custom_query_in_mock_provider():
+    provider = MockModelProvider()
+    pipeline = CebuanoDoctorPipeline(provider=provider)
+    query = "usahay malipong ko everytime mag ride ko sa car"
+    result = pipeline.run(query)
+
+    assert result.status == "success"
+    # Stage 1 must NOT leak prompt template
+    assert "patient cebuano complaint" not in result.english_translation.lower()
+    assert "english clinical translation" not in result.english_translation.lower()
+    assert "motion sickness" in result.english_translation.lower() or "dizziness" in result.english_translation.lower()
+    # Stage 2 must address motion sickness
+    assert "kinetosis" in result.english_medical_guidance.lower() or "motion sickness" in result.english_medical_guidance.lower()
+    # Stage 3 must be in Bisaya/Cebuano
+    assert "motion sickness" in result.cebuano_medical_guidance.lower() or "pagkalipong" in result.cebuano_medical_guidance.lower()
+
+
+def test_unseen_custom_query_clean_fallback_without_template_leak():
+    provider = MockModelProvider()
+    pipeline = CebuanoDoctorPipeline(provider=provider)
+    query = "nabali akong kuko sa tudlo samtang nag-abri og lata sa sardinas"
+    result = pipeline.run(query)
+
+    assert result.status == "success"
+    assert "patient cebuano complaint" not in result.english_translation.lower()
+    assert "english clinical translation" not in result.english_translation.lower()
+    assert query in result.english_translation
+
+

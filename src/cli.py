@@ -15,6 +15,7 @@ from src.domain.pipeline import CebuanoDoctorPipeline
 from src.domain.provider import MockModelProvider, ModelProvider
 from src.providers.ollama_provider import OllamaProvider
 from src.storage import save_run
+from src.ui_helpers import SAMPLE_PROMPTS
 
 
 def parse_args(args: Optional[Sequence[str]] = None) -> argparse.Namespace:
@@ -27,6 +28,14 @@ def parse_args(args: Optional[Sequence[str]] = None) -> argparse.Namespace:
         action="store_true",
         default=False,
         help="Run using offline MockModelProvider without connecting to Ollama.",
+    )
+    parser.add_argument(
+        "--preset",
+        "-p",
+        type=int,
+        choices=[1, 2, 3, 4, 5],
+        default=None,
+        help="Select preset benchmark scenario (1: Tension Headache, 2: Panuhot, 3: Pasmo, 4: Kalibanga, 5: Pneumonia)",
     )
     parser.add_argument(
         "--chief-complaint",
@@ -67,8 +76,13 @@ def parse_args(args: Optional[Sequence[str]] = None) -> argparse.Namespace:
         help="Pipeline stages to inspect in terminal output (1: NLU, 2: Inference, 3: NLG; default: 1 2 3).",
     )
     parsed = parser.parse_args(args)
+    if parsed.preset is not None:
+        preset_values = list(SAMPLE_PROMPTS.values())
+        if 1 <= parsed.preset <= len(preset_values):
+            parsed.chief_complaint = preset_values[parsed.preset - 1]
     parsed.query = parsed.chief_complaint
     return parsed
+
 
 
 def render_consultation_panels(

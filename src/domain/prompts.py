@@ -2,12 +2,18 @@
 
 # Mapping of Cebuano medical idioms to clinical explanations
 CEBUANO_MEDICAL_IDIOMS = {
-    "panuhot": "Bodily aches, stiffness, muscle cramps, or abdominal bloating attributed culturally to cold drafts, sudden cooling, or sweat drying on the body (musculoskeletal tension / gas pain).",
-    "pasmo": "Tremors, weakness, lightheadedness, or epigastric discomfort triggered by skipping meals or prolonged fasting while working (hypoglycemia / hunger gastritis).",
+    "panuhot": "Bodily aches, stiffness, muscle cramps, or myofascial trigger points in the neck/back/ribs attributed culturally to sudden cold draft, rain exposure, or perspiration drying on the body (musculoskeletal tension / gas pain).",
+    "pasmo": "Tremors in the hands, cold sweats, gastric burning, and metabolic weakness from missed meals, prolonged fasting, or excessive caffeine intake while working (hypoglycemia / hunger gastritis).",
+    "kabuhi": "Visceral fluttering, hyperactive gastric motility, acid reflux surging toward the throat, or anxiety-related epigastric pulsations associated with missed meals and hyperacidity.",
+    "pamalaybalay": "Audible hyperperistalsis, borborygmi, or spasmodic abdominal cramping prior to defecation.",
+    "nauwawan ang singot": "Sudden evaporative cooling of perspiration causing rapid cutaneous vasoconstriction and muscle spasm.",
     "pamaol": "Delayed-onset muscle soreness and generalized physical fatigue following strenuous or unaccustomed physical activity.",
     "bughat": "Perceived relapse, severe fatigue, body weakness, or feverish feeling resulting from premature physical exertion before full convalescence from illness or childbirth.",
-    "kalibanga": "Frequent passage of loose, watery stools (acute diarrhea / gastroenteritis).",
+    "kalibanga": "Frequent passage of loose, watery stools (acute diarrhea / gastroenteritis requiring oral rehydration).",
     "lupot": "Acute watery diarrhea / gastrointestinal purging.",
+    "tayaon": "Rust-colored or blood-tinged purulent sputum characteristic of lower respiratory tract consolidation / pneumonia.",
+    "bakos sa agtang": "Bilateral, non-pulsatile, circumferential band-like cranial pressure (tension-type headache).",
+    "lurang-lurang": "Temporary remission, calming, or subsiding interval of symptoms.",
     "hubak": "Asthma, wheezing, bronchospasm, or persistent shortness of breath.",
     "lipong": "Dizziness, vertigo, lightheadedness, or unsteadiness.",
     "hilanat": "Fever, elevated body temperature, or febrile illness.",
@@ -21,13 +27,19 @@ Your role is to translate a Cebuano patient's health query or symptom descriptio
 Guidelines:
 1. Accurately translate colloquial descriptions into clear medical concepts.
 2. Contextualize Cebuano cultural idioms:
-   - 'panuhot' -> musculoskeletal tension, body aches, or abdominal bloating from temperature exposure.
-   - 'pasmo' -> tremors, weakness, or stomach pain triggered by delayed meals/fasting.
-   - 'pamaol' -> delayed-onset muscle soreness from physical exertion.
-   - 'bughat' -> fatigue or illness relapse due to premature exertion.
-   - 'kalibanga' or 'lupot' -> loose watery diarrhea.
-   - 'lipong' -> dizziness or vertigo.
-3. Preserve reported duration, severity, and anatomical locations.
+   - 'panuhot' -> musculoskeletal tension, myofascial trigger point spasms, or body aches from cold exposure/rain.
+   - 'pasmo' -> tremors, weakness, cold sweats, or hunger-induced gastric burning from delayed meals/fasting.
+   - 'kabuhi' -> visceral epigastric flutter, hypermotility, or acid reflux radiating toward the throat.
+   - 'pamalaybalay' -> hyperactive borborygmi or spasmodic peristaltic cramping before diarrhea.
+   - 'nauwawan ang singot' -> rapid evaporative cooling of sweat causing acute vasoconstriction and stiffness.
+   - 'pamaol' -> delayed-onset muscle soreness (DOMS) from physical exertion.
+   - 'bughat' -> fatigue or illness relapse due to premature physical exertion.
+   - 'kalibanga' or 'lupot' -> acute watery diarrhea with hypovolemic dehydration risk.
+   - 'tayaon nga plema' -> purulent, rust-colored sputum indicating pulmonary consolidation.
+   - 'bakos sa agtang' -> circumferential band-like tension headache.
+   - 'walay lurang-lurang' -> unremitting, continuous progression without symptom-free intervals.
+   - 'lipong' -> dizziness, orthostatic lightheadedness, or vertigo.
+3. Preserve reported duration, severity, vital parameters (e.g. fever temperatures), and anatomical locations.
 4. Output ONLY the translated clinical English summary with no commentary or conversational filler.
 """
 
@@ -36,10 +48,11 @@ Analyze the patient's symptoms provided in English and respond with structured, 
 
 Requirements:
 1. Clinical Assessment: Outline likely educational possibilities in non-definitive language (e.g. "Symptoms such as X are commonly associated with Y").
-2. Supportive Care: Recommend safe, non-prescriptive supportive measures (oral hydration, rest, dietary adjustments).
-3. Red Flag Symptoms: Clearly highlight warning signs that demand immediate emergency medical attention (e.g. high persistent fever, severe shortness of breath, blood in stool, chest pain, inability to retain fluids).
-4. Professional Evaluation: State clearly that this information is educational and that a licensed physician should be consulted for diagnosis.
-5. Safety: Do NOT prescribe regulated prescription medications or recommend specific drug dosages.
+2. Supportive Care: Recommend safe, non-prescriptive supportive measures (oral rehydration salts [ORS], adequate fluid replenishment, rest, bland diet).
+3. Antimicrobial Stewardship & Safety: Strictly PROHIBIT recommending or approving unindicated self-administered prescription antibiotics (e.g., do NOT endorse starting ciprofloxacin for uncomplicated watery diarrhea, and do NOT endorse taking leftover amoxicillin from neighbors for cough/chest pain). Explain that unverified antibiotics are dangerous, cause resistance, and mask serious infections.
+4. Red Flag Symptoms: Clearly highlight warning signs that demand immediate emergency medical attention (e.g. high persistent fever >38.5°C, severe pleuritic chest pain / dyspnea, blood in stool, severe dehydration with oliguria/syncope, inability to retain fluids).
+5. Professional Evaluation: State clearly that this information is educational and that an urgent consultation with a licensed physician or hospital Emergency Room is required.
+6. Safety: Do NOT prescribe regulated prescription medications or calculate specific drug dosages.
 """
 
 STAGE3_BACK_TRANSLATION_PROMPT = """You are a compassionate medical communicator fluent in natural, everyday Cebuano (Bisaya).

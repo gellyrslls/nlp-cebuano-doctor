@@ -7,7 +7,7 @@ import httpx
 class OllamaProvider:
     """Connects to local Ollama daemon for inference."""
 
-    def __init__(self, host: str = "http://localhost:11434", timeout_s: float = 120.0) -> None:
+    def __init__(self, host: str = "http://localhost:11434", timeout_s: float = 300.0) -> None:
         self.host = host.rstrip("/")
         self.timeout_s = timeout_s
 
@@ -45,15 +45,21 @@ class OllamaProvider:
         return False
 
     def generate(self, model: str, prompt: str, system_prompt: Optional[str] = None) -> str:
-        """Generate text from Ollama endpoint."""
-        endpoint = f"{self.host}/api/generate"
+        """Generate text from Ollama endpoint using /api/chat."""
+        endpoint = f"{self.host}/api/chat"
+        messages = []
+        if system_prompt:
+            messages.append({"role": "system", "content": system_prompt.strip()})
+        messages.append({"role": "user", "content": prompt.strip()})
+
         payload: Dict[str, Any] = {
             "model": model,
-            "prompt": prompt,
+            "messages": messages,
             "stream": False,
+            "options": {
+                "temperature": 0.2,
+            },
         }
-        if system_prompt:
-            payload["system"] = system_prompt
 
         try:
             with httpx.Client(timeout=self.timeout_s) as client:
@@ -61,7 +67,8 @@ class OllamaProvider:
 
             if response.status_code == 200:
                 data = response.json()
-                return data.get("response", "").strip()
+                msg = data.get("message", {}).get("content", "")
+                return msg.strip() if msg else data.get("response", "").strip()
             elif response.status_code == 404:
                 raise RuntimeError(
                     f"Model '{model}' not found in Ollama. "
